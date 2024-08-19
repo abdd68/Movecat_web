@@ -16,8 +16,7 @@ from flask_session import Session
 import redis
 
 matplotlib.use('Agg')
-
-r = redis.from_url(os.environ.get("REDIS_URL"))
+r = redis.from_url(os.environ.get("REDIS_URL", "redis://localhost:6379/0"))
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # 必须设置用于 session 和 flash 消息
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -36,7 +35,7 @@ def get_text(key):
 def load_user_data():
     data = r.get("__overalluserdata__")
     if data is None:
-        data = {}
+        data = '{}'
     return json.loads(data)
 
 def save_user_data(data):
@@ -47,7 +46,7 @@ def load_user_record():
     current_user = session.get('current_user','')
     data = r.get(current_user)
     if data is None:
-        return {}
+        data = '{}'
     return json.loads(data)
 
 def save_user_record(data):
