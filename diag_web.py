@@ -6,7 +6,6 @@ import json
 import matplotlib.pyplot as plt
 import matplotlib
 from collections import OrderedDict
-import customtkinter as ctk  # 假设你正在使用 customtkinter
 from io import BytesIO
 import base64
 from matplotlib.figure import Figure
