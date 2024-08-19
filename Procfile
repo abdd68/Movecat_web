@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn diag_web:app
