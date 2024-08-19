@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            font-size: 18px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 32px;
+            color: #333;
+        }
+        .plot-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .return-button-container {
+            display: flex;
+            justify-content: center; /* 居中按钮容器 */
+            margin-top: 20px;
+            width: 60%;
+        }
+        .return-button-container button {
+            width: auto;
+            min-width: 120px;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 18px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+        }
+        .return-button-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <div class="plot-container">
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Risk Factor Analysis">
+    </div>
+
+    <script>
+        // 检查是否已经刷新过页面
+        if (!localStorage.getItem('hasReloaded')) {
+            // 如果没有刷新过，执行刷新操作
+            localStorage.setItem('hasReloaded', 'true');
+            location.reload(); // 强制刷新页面
+        } else {
+            // 如果已经刷新过，则清除标记，防止以后再次刷新
+            localStorage.removeItem('hasReloaded');
+        }
+    </script>
+    
+    <div class="return-button-container">
+        <form action="{{ url_for('page3') }}" method="GET">
+            <button type="submit">{{Return}}</button>
+        </form>
+        <form action="{{ url_for('home') }}" method="GET">
+            <button type="submit">{{Back_Home}}</button>
+        </form>
+    </div>
+</body>
+</html>

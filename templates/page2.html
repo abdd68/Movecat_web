@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            max-width: 700px;  /* Increased width for better layout */
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+        }
+
+        input:focus, select:focus {
+            background-color: #e6f7ff;  /* Light blue background on focus */
+            outline: none;
+            border-color: #66afe9;
+        }
+
+        .required-label::after {
+            content: " *";
+            color: red;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .form-group div {
+            flex: 0 0 48%; /* Two columns with 4% space between */
+        }
+
+        button {
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 18px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 123, 255, 0.4);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .full-width {
+            flex: 0 0 100%;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{detection_page}}</h2>
+    <form action="{{ url_for('page2') }}" method="POST" style="max-width: 900px; margin: auto; font-family: Arial, sans-serif;">
+        <style>
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-size: 18px;
+            }
+    
+            input, select {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 20px;
+                font-size: 16px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+            }
+    
+            .required-label::after {
+                content: " *";
+                color: red;
+                font-size: 24px;
+            }
+    
+            .form-group {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+    
+            .form-group div {
+                flex: 0 0 48%; /* Two columns with 4% space between */
+            }
+    
+            button {
+                padding: 10px 20px;
+                margin-top: 10px;
+                font-size: 18px;
+                color: white;
+                background-color: #007bff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                width: 100%;
+            }
+    
+            button:hover {
+                background-color: #0056b3;
+            }
+    
+            .full-width {
+                flex: 0 0 100%;
+            }
+        </style>
+    
+        <div class="form-group">
+            <div>
+                <label for="age" class="required-label">{{ labels[0] }}:</label>
+                <input type="text" id="age" name="Age (years)" value="{{ suggestions.get('Age (years)', '') }}">
+            </div>
+        
+            <div>
+                <label for="time_lapse" class="required-label">{{ labels[1] }}:</label>
+                <input type="text" id="time_lapse" name="Time Lapse (years)" value="{{ suggestions.get('Time Lapse (years)', '') }}">
+            </div>
+        
+            <div>
+                <label for="weight" class="required-label">{{ labels[2] }}:</label>
+                <input type="text" id="weight" name="Body weight (Kg)" value="{{ suggestions.get('Body weight (Kg)', '') }}">
+            </div>
+        
+            <div>
+                <label for="height" class="required-label">{{ labels[3] }}:</label>
+                <input type="text" id="height" name="Height (cm)" value="{{ suggestions.get('Height (cm)', '') }}">
+            </div>
+        
+            <div>
+                <label for="shoulder_movement" class="required-label">{{ labels[4] }}:</label>
+                <select id="shoulder_movement" name="Limited shoulder movement">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Limited shoulder movement') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Limited shoulder movement') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Limited shoulder movement') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Limited shoulder movement') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Limited shoulder movement') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="elbow_movement" class="required-label">{{ labels[5] }}:</label>
+                <select id="elbow_movement" name="Limited elbow movement">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Limited elbow movement') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Limited elbow movement') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Limited elbow movement') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Limited elbow movement') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Limited elbow movement') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="wrist_movement" class="required-label">{{ labels[6] }}:</label>
+                <select id="wrist_movement" name="Limited wrist movement">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Limited wrist movement') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Limited wrist movement') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Limited wrist movement') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Limited wrist movement') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Limited wrist movement') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="fingers_movement" class="required-label">{{ labels[7] }}:</label>
+                <select id="fingers_movement" name="Limited fingers movement">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Limited fingers movement') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Limited fingers movement') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Limited fingers movement') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Limited fingers movement') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Limited fingers movement') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="arm_movement" class="required-label">{{ labels[8] }}:</label>
+                <select id="arm_movement" name="Limited arm movement">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Limited arm movement') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Limited arm movement') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Limited arm movement') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Limited arm movement') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Limited arm movement') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="arm_swelling" class="required-label">{{ labels[9] }}:</label>
+                <select id="arm_swelling" name="Arm or hand swelling">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Arm or hand swelling') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Arm or hand swelling') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Arm or hand swelling') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Arm or hand swelling') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Arm or hand swelling') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="breast_swelling" class="required-label">{{ labels[10] }}:</label>
+                <select id="breast_swelling" name="Breast swelling">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Breast swelling') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Breast swelling') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Breast swelling') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Breast swelling') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Breast swelling') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="chest_swelling" class="required-label">{{ labels[11] }}:</label>
+                <select id="chest_swelling" name="Chest swelling">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Chest swelling') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Chest swelling') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Chest swelling') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Chest swelling') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Chest swelling') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="skin" class="required-label">{{ labels[12] }}:</label>
+                <select id="skin" name="Toughness or thickness of skin">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Toughness or thickness of skin') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Toughness or thickness of skin') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Toughness or thickness of skin') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Toughness or thickness of skin') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Toughness or thickness of skin') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="pain" class="required-label">{{ labels[13] }}:</label>
+                <select id="pain" name="Pain, aching, soreness">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Pain, aching, soreness') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Pain, aching, soreness') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Pain, aching, soreness') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Pain, aching, soreness') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Pain, aching, soreness') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="tightness" class="required-label">{{ labels[14] }}:</label>
+                <select id="tightness" name="Tightness">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Tightness') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Tightness') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Tightness') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Tightness') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Tightness') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="heaviness" class="required-label">{{ labels[15] }}:</label>
+                <select id="heaviness" name="Heaviness">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Heaviness') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Heaviness') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Heaviness') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Heaviness') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Heaviness') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="burning" class="required-label">{{ labels[16] }}:</label>
+                <select id="burning" name="Burning">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Burning') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Burning') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Burning') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Burning') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Burning') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="tingling" class="required-label">{{ labels[17] }}:</label>
+                <select id="tingling" name="Tingling">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Tingling') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Tingling') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Tingling') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Tingling') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Tingling') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="weakness" class="required-label">{{ labels[18] }}:</label>
+                <select id="weakness" name="Weakness">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Weakness') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Weakness') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Weakness') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Weakness') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Weakness') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="hotness" class="required-label">{{ labels[19] }}:</label>
+                <select id="hotness" name="Hotness">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Hotness') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Hotness') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Hotness') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Hotness') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Hotness') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="tenderness" class="required-label">{{ labels[20] }}:</label>
+                <select id="tenderness" name="Tenderness">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Tenderness') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Tenderness') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Tenderness') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Tenderness') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Tenderness') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="firmness" class="required-label">{{ labels[21] }}:</label>
+                <select id="firmness" name="Firmness">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Firmness') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Firmness') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Firmness') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Firmness') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Firmness') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="numbness" class="required-label">{{ labels[22] }}:</label>
+                <select id="numbness" name="Numbness">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Numbness') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Numbness') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Numbness') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Numbness') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Numbness') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="stabbing" class="required-label">{{ labels[23] }}:</label>
+                <select id="stabbing" name="Stabbing">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Stabbing') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Stabbing') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Stabbing') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Stabbing') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Stabbing') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="fatigue" class="required-label">{{ labels[24] }}:</label>
+                <select id="fatigue" name="Fatigue">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Fatigue') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Fatigue') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Fatigue') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Fatigue') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Fatigue') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="redness" class="required-label">{{ labels[25] }}:</label>
+                <select id="redness" name="Redness">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Redness') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Redness') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Redness') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Redness') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Redness') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="stiffness" class="required-label">{{ labels[26] }}:</label>
+                <select id="stiffness" name="Stiffness">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Stiffness') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Stiffness') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Stiffness') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Stiffness') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Stiffness') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="blister" class="required-label">{{ labels[27] }}:</label>
+                <select id="blister" name="Blister">
+                    <option value="">-</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Blister') == "0" else '' }}>{{ notations[0] }}</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Blister') == "1" else '' }}>{{ notations[1] }}</option>
+                    <option value="2" {{ 'selected' if suggestions.get('Blister') == "2" else '' }}>{{ notations[2] }}</option>
+                    <option value="3" {{ 'selected' if suggestions.get('Blister') == "3" else '' }}>{{ notations[3] }}</option>
+                    <option value="4" {{ 'selected' if suggestions.get('Blister') == "4" else '' }}>{{ notations[4] }}</option>
+                </select>
+            </div>
+            
+            <div class="full-width">
+                <label for="chemotherapy">{{ labels[28] }}:</label>
+                <select id="chemotherapy" name="Chemotherapy">
+                    <option value="">-</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Chemotherapy') == "1" else '' }}>{{ notations[5] }}</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Chemotherapy') == "0" else '' }}>{{ notations[6] }}</option>
+                </select>
+            </div>
+            
+            <div class="full-width">
+                <label for="radiation">{{ labels[29] }}:</label>
+                <select id="radiation" name="Radiation">
+                    <option value="">-</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Radiation') == "1" else '' }}>{{ notations[5] }}</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Radiation') == "0" else '' }}>{{ notations[6] }}</option>
+                </select>
+            </div>
+            
+            <div class="full-width">
+                <label for="mastectomy">{{ labels[30] }}:</label>
+                <select id="mastectomy" name="Mastectomy">
+                    <option value="">-</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Mastectomy') == "1" else '' }}>{{ notations[5] }}</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Mastectomy') == "0" else '' }}>{{ notations[6] }}</option>
+                </select>
+            </div>
+            
+            <div class="full-width">
+                <label for="lumpectomy">{{ labels[31] }}:</label>
+                <select id="lumpectomy" name="Lumpectomy">
+                    <option value="">-</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Lumpectomy') == "1" else '' }}>{{ notations[5] }}</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Lumpectomy') == "0" else '' }}>{{ notations[6] }}</option>
+                </select>
+            </div>
+            
+            <div class="full-width">
+                <label for="hormonal">{{ labels[32] }}:</label>
+                <select id="hormonal" name="Hormonal therapy">
+                    <option value="">-</option>
+                    <option value="1" {{ 'selected' if suggestions.get('Hormonal therapy') == "1" else '' }}>{{ notations[5] }}</option>
+                    <option value="0" {{ 'selected' if suggestions.get('Hormonal therapy') == "0" else '' }}>{{ notations[6] }}</option>
+                </select>
+            </div>
+            
+            <div class="full-width">
+                <label for="slnb">{{ labels[33] }}:</label>
+                <input type="text" id="slnb" name="SLNB_Removed_LN" value="{{ suggestions.get('SLNB_Removed_LN', '') }}">
+            </div>
+        
+            <div class="full-width">
+                <label for="alnd">{{ labels[34] }}:</label>
+                <input type="text" id="alnd" name="ALND_Removed_LN" value="{{ suggestions.get('ALND_Removed_LN', '') }}">
+            </div>
+        </div>
+        
+        <!-- 渲染闪现消息 -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <div style="display: flex; justify-content: space-between;">
+            <button type="submit" name="action" value="reset">{{Reset}}</button>
+            <button type="submit" name="action" value="save">{{Save}}</button>
+            <button type="submit" name="action" value="submit">{{Submit}}</button>
+            <button type="submit" name="action" value="return">{{Return_Home}}</button>
+        </div>
+    </form>
+    
+</body>
+</html>

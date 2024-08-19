@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        button {
+            font-size: 18px; /* 增大字体 */
+            padding: 10px 20px; /* 增大内边距 */
+            border-radius: 5px; /* 圆角按钮 */
+            background-color: #007bff; /* 按钮背景颜色 */
+            color: white; /* 按钮文字颜色 */
+            border: none; /* 去掉边框 */
+            cursor: pointer; /* 鼠标悬停时的样式 */
+        }
+        button:hover {
+            background-color: #0056b3; /* 悬停时改变背景颜色 */
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    <form action="{{ url_for('page2') }}">
+        <button type="submit">{{Begindetection}}</button>
+    </form>
+    <!-- Logout Button -->
+    <form action="{{ url_for('logout') }}">
+        <button type="submit">{{Logout}}</button>
+    </form>
+    <img src="{{ url_for('static', filename='lymph.png') }}" alt="Lymph Image">
+</body>
+</html>

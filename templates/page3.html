@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #eaeaea; /* 背景色 */
+            font-size: 24px; /* 设置全局字体大小 */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 36px; /* 增大标题字体 */
+            color: #333; /* 标题颜色 */
+            letter-spacing: 2px; /* 字符间距 */
+        }
+        .plot-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+        }
+        .comments-container, .suggestions-container {
+            width: 80%;
+            margin-bottom: 20px;
+            text-align: left;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+        }
+        h2 {
+            font-size: 28px; /* 设置二级标题的字体大小 */
+            color: #444; /* 二级标题颜色 */
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: #555; /* 列表文字颜色 */
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .button-container form {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        .button-container button {
+            padding: 10px 30px;
+            font-size: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+            transition: background-color 0.3s ease;
+        }
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+        .button-container button:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <div class="plot-container">
+        {{ plot_frame_content | safe }}
+    </div>
+
+    <script>
+        // 检查是否已经刷新过页面
+        if (!localStorage.getItem('hasReloaded')) {
+            // 如果没有刷新过，执行刷新操作
+            localStorage.setItem('hasReloaded', 'true');
+            location.reload(); // 强制刷新页面
+        } else {
+            // 如果已经刷新过，则清除标记，防止以后再次刷新
+            localStorage.removeItem('hasReloaded');
+        }
+    </script>
+    <div class="comments-container">
+        <h2>{{ct}}</h2>
+        <ul>
+            {% for comment in comments %}
+                <li>{{ comment }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="suggestions-container">
+        <h2>{{st}}</h2>
+        <ul>
+            {% for suggestion in suggestions %}
+                <li>{{ suggestion }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="button-container">
+        <form action="{{ url_for('pagehistory') }}" method="GET">
+            <button type="submit">{{History}}</button>
+        </form>
+        <form action="{{ url_for('pagefactor') }}" method="GET">
+            <button type="submit">{{Risk_Analysis}}</button>
+        </form>
+        <form action="{{ url_for('page2') }}" method="GET">
+            <button type="submit">{{Return}}</button>
+        </form>
+        <form action="{{ url_for('home') }}" method="GET">
+            <button type="submit">{{Back_Home}}</button>
+        </form>
+    </div>
+</body>
+</html>
