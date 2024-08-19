@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from utils import load_user_data, save_user_data
 import os
 import math
@@ -13,71 +13,66 @@ import numpy as np
 import pickle
 from matplotlib import font_manager
 from matplotlib.font_manager import FontProperties
+from flask_session import Session
 
 matplotlib.use('Agg')
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # 必须设置用于 session 和 flash 消息
-font_path = os.path.join('static', 'SimHei.ttf') # 替换为SimHei.ttf的实际路径
-font_manager.fontManager.addfont(font_path)
-login_flag = False
-score_save_flag = False
-lang = 'English'
-current_user = ''
-output_labels = {}
-# 加载用户数据
-user_data = load_user_data(os.path.join("static", "user_data.json"))
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
+font_manager.fontManager.addfont(os.path.join('static', 'SimHei.ttf'))
+
 def load_translations(filepath):
     with open(filepath, 'r', encoding='utf-8') as file:
         return json.load(file)
-translations = load_translations(os.path.join("static", "translations.json"))
 def get_translation(translations, lang, key):
     return translations.get(lang, {}).get(key, key)
 def get_text(key):
-    global translations, lang
-    return get_translation(translations, lang, key)
+    lang = session.get('lang', 'English')
+    return get_translation(session.get('translations'), lang, key)
 
 # Helper function to validate string input
 def validate_str(_str):
     return '0' if (_str == '-' or _str == '' or _str == ' ') else _str
 
 @app.route('/')
-def home():
-    global login_flag
-    if not login_flag:
-        return render_template('page1.html', title=get_text("title"),
+def landing():
+    # 加载用户数据
+    session['user_data'] = load_user_data(os.path.join("static", "user_data.json"))
+    session['translations'] = load_translations(os.path.join("static", "translations.json"))
+    session['score_save_flag'] = False
+    return render_template('page1.html', title=get_text("title"),
                                login_text=get_text("Register/Login"))
-    else:
-        return render_template('page1s.html', title=get_text("title"), 
+        
+        
+@app.route('/home')
+def home():
+    return render_template('page1s.html', title=get_text("title"), 
                                Begindetection=get_text("begin_detection"),
                                Logout=get_text("Logout"))
     
 @app.route('/set_language', methods=['POST'])
 def set_language():
-    global lang
-    lang = request.form.get('lang')
-    return redirect(url_for('home'))
+    session['lang'] = request.form.get('lang', 'English')
+    return redirect(url_for('landing'))
 
 @app.route('/logout')
 def logout():
-    global current_user, login_flag
     # 将 current_user 设置为空字符串
-    login_flag = False
-    current_user = ''
+    session['current_user'] = ''
     # 重定向到主页
-    return redirect(url_for('home'))
+    return redirect(url_for('landing'))
 
 @app.route('/pagelogin', methods=['GET', 'POST'])
 def page_login():
-    global user_data, login_flag, current_user
-    
     if request.method == 'POST':
         action = request.form['action']  # 判断用户点击了哪个按钮
         username = request.form['username']
         password = request.form['password']
+        user_data = session.get('user_data')
         if action == 'Login':
             if username in user_data and user_data[username] == password:
-                login_flag = True
-                current_user = username
+                session['current_user'] = username
                 return redirect(url_for('home'))
             else:
                 flash(get_text('Invalid username or password'), 'danger')
@@ -103,20 +98,21 @@ def page_login():
 # The Page2 view
 @app.route('/page2', methods=['GET', 'POST'])
 def page2():
-    global current_user, output_labels, score_save_flag  # This should be dynamically set based on the current session or login
-
+    current_user = session.get('current_user','')
     if request.method == 'POST':
         action = request.form.get('action')
 
         if action == 'submit':
+            labels = request.form.to_dict()
+            save_suggestions(current_user, labels)
             for i, field in enumerate(request.form.keys()):
                 if request.form[field].strip() == '' and i < 28:
                     flash(get_text('Please fill in all required fields.'), 'danger')
                     return redirect(url_for('page2'))
             labels = request.form.to_dict()
             save_suggestions(current_user, labels)
-            output_labels = label_processing(labels)
-            score_save_flag = True
+            session['output_labels'] = label_processing(labels)
+            session['score_save_flag'] = True
             return redirect(url_for('page3'))
         
         elif action == 'save':
@@ -159,8 +155,9 @@ def page2():
     
 @app.route('/page3')
 def page3():
-    global output_labels, current_user, lang
-
+    output_labels = session.get('output_labels', {})
+    current_user = session.get('current_user','')
+    lang = session.get('lang')
     select_mask = ['Mobility', 'ArmSwelling', 'BreastSwelling', 'Skin', 'FHT', 'DISCOMFORT'\
         , 'SYM_COUNT', 'ChestWallSwelling', 'Mastectomy', 'Lumpectomy', 'TIME_LAPSE']
     data_select = np.array([[output_labels[item] for item in select_mask]], dtype=float)
@@ -258,6 +255,8 @@ def page3():
 
 @app.route('/pagehistory', methods=['GET'])
 def pagehistory():
+    lang = session.get('lang', 'English')
+    current_user = session.get('current_user', '')
     # 从 JSON 文件中读取用户的得分历史
     with open(os.path.join("static", "user_record.json"), 'r') as json_file:
         existing_data = json.load(json_file)
@@ -305,7 +304,7 @@ def pagehistory():
     plot_scores(score_list)
     
     # 保存图表为图片
-    fig_path = 'static/score_history.png'
+    fig_path = os.path.join("static", "score_history.png")
     plt.tight_layout()
     plt.savefig(fig_path)
 
@@ -333,6 +332,8 @@ def pagefactor():
                            Back_Home = get_text('Back Home'))
 
 def create_figure_factor():
+    lang = session.get('lang', 'English')
+    output_labels = session.get('output_labels', {})
     plt.figure(num=4, figsize=(16, 10), dpi=80, facecolor="white", edgecolor='Teal', frameon=True)
     # 设置字体
     plt.rcParams['font.sans-serif'] = ['SimHei']
@@ -494,7 +495,8 @@ def label_processing(labels):
     return output_labels
 
 def save_score(overall_score):
-    global score_save_flag, current_user
+    score_save_flag = session.get('score_save_flag','False')
+    current_user = session.get('current_user','')
     if score_save_flag:
         with open(os.path.join("static", "user_record.json"), 'r') as json_file:
             existing_data = json.load(json_file)
@@ -505,7 +507,7 @@ def save_score(overall_score):
                 user_dict['score_list'].append(overall_score)
         with open(os.path.join("static", "user_record.json"), 'w') as json_file:
             json.dump(existing_data, json_file, indent=4)
-        score_save_flag = False
+        session['score_save_flag'] = False
 
 if __name__ == '__main__':
     app.run(debug=True)
