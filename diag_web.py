@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from utils import load_user_data, save_user_data
 import os
 import math
 import json
@@ -14,8 +13,11 @@ import pickle
 from matplotlib import font_manager
 from matplotlib.font_manager import FontProperties
 from flask_session import Session
+import redis
 
 matplotlib.use('Agg')
+
+r = redis.from_url(os.environ.get("REDIS_URL"))
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # 必须设置用于 session 和 flash 消息
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -31,6 +33,28 @@ def get_text(key):
     lang = session.get('lang', 'English')
     return get_translation(session.get('translations'), lang, key)
 
+def load_user_data():
+    data = r.get("__overalluserdata__")
+    if data is None:
+        data = {}
+    return json.loads(data)
+
+def save_user_data(data):
+    data = json.dumps(data)
+    r.set("__overalluserdata__", data)
+    
+def load_user_record():
+    current_user = session.get('current_user','')
+    data = r.get(current_user)
+    if data is None:
+        return {}
+    return json.loads(data)
+
+def save_user_record(data):
+    current_user = session.get('current_user','')
+    data = json.dumps(data)
+    r.set(current_user, data)
+
 # Helper function to validate string input
 def validate_str(_str):
     return '0' if (_str == '-' or _str == '' or _str == ' ') else _str
@@ -38,7 +62,7 @@ def validate_str(_str):
 @app.route('/')
 def landing():
     # 加载用户数据
-    session['user_data'] = load_user_data(os.path.join("static", "user_data.json"))
+    session['user_data'] = load_user_data()
     session['translations'] = load_translations(os.path.join("static", "translations.json"))
     session['score_save_flag'] = False
     return render_template('page1.html', title=get_text("title"),
@@ -86,7 +110,7 @@ def page_login():
             else:
                 user_data[username] = password
                 flash(get_text('Registration successful, please login'), 'success')
-                save_user_data(os.path.join("static", "user_data.json"), user_data)
+                save_user_data(user_data)
                 return redirect(url_for('page_login'))
 
     return render_template('pagelogin.html', Welcome = get_text("Welcome"), 
@@ -98,38 +122,37 @@ def page_login():
 # The Page2 view
 @app.route('/page2', methods=['GET', 'POST'])
 def page2():
-    current_user = session.get('current_user','')
     if request.method == 'POST':
         action = request.form.get('action')
 
         if action == 'submit':
             labels = request.form.to_dict()
-            save_suggestions(current_user, labels)
+            save_suggestions(labels)
             for i, field in enumerate(request.form.keys()):
                 if request.form[field].strip() == '' and i < 28:
                     flash(get_text('Please fill in all required fields.'), 'danger')
                     return redirect(url_for('page2'))
             labels = request.form.to_dict()
-            save_suggestions(current_user, labels)
+            save_suggestions(labels)
             session['output_labels'] = label_processing(labels)
             session['score_save_flag'] = True
             return redirect(url_for('page3'))
         
         elif action == 'save':
             labels = request.form.to_dict()
-            save_suggestions(current_user, labels)
+            save_suggestions(labels)
             flash(get_text('Data saved successfully'), 'success')
             return redirect(url_for('page2'))
         
         elif action == 'reset':
-            reset_suggestions(current_user)
+            reset_suggestions()
             flash(get_text('Data reset successfully'), 'success')
             return redirect(url_for('page2'))
         elif action == 'return':
             return redirect(url_for('home'))
 
     # Load suggestions to pre-fill the form
-    suggestions = load_suggestions(current_user)
+    suggestions = load_suggestions()
     labels = [
     "Your age (years)", "Time Lapse (years)", "Body weight (Kg)", "Height (cm)",
     "Limited shoulder movement", "Limited elbow movement", "Limited wrist movement",
@@ -156,7 +179,6 @@ def page2():
 @app.route('/page3')
 def page3():
     output_labels = session.get('output_labels', {})
-    current_user = session.get('current_user','')
     lang = session.get('lang')
     select_mask = ['Mobility', 'ArmSwelling', 'BreastSwelling', 'Skin', 'FHT', 'DISCOMFORT'\
         , 'SYM_COUNT', 'ChestWallSwelling', 'Mastectomy', 'Lumpectomy', 'TIME_LAPSE']
@@ -220,12 +242,11 @@ def page3():
     plot_frame_content = f'<img src="data:image/png;base64,{encoded_img}"/>'
     
     # Generate comments and suggestions based on logic
-    with open(os.path.join("static", "user_record.json"), 'r') as json_file:
-        existing_data = json.load(json_file)
-        try:
-            score_list = existing_data[current_user]['score_list']
-        except:
-            score_list = []
+    existing_data = load_user_record()
+    try:
+        score_list = existing_data['score_list']
+    except:
+        score_list = []
     comments = []
     suggestions = []
 
@@ -256,11 +277,9 @@ def page3():
 @app.route('/pagehistory', methods=['GET'])
 def pagehistory():
     lang = session.get('lang', 'English')
-    current_user = session.get('current_user', '')
     # 从 JSON 文件中读取用户的得分历史
-    with open(os.path.join("static", "user_record.json"), 'r') as json_file:
-        existing_data = json.load(json_file)
-        score_list = existing_data[current_user]['score_list']
+    existing_data = load_user_record()
+    score_list = existing_data['score_list']
     
     # 获取用户的选择
     show = request.args.get('show', '5')  # 默认显示最近 5 次
@@ -397,32 +416,26 @@ def create_figure_factor():
     
     return output
 
-
 # Save suggestions function
-def save_suggestions(current_user, suggestions):
-    existing_data = load_user_data(os.path.join("static", "user_record.json"))
+def save_suggestions(suggestions):
+    existing_data = load_user_record()
     try:
-        existing_data[current_user]['suggestions'] = suggestions
+        existing_data['suggestions'] = suggestions
     except:
-        existing_data[current_user] = {}
-        existing_data[current_user]['suggestions'] = suggestions
-    with open(os.path.join("static", "user_record.json"), 'w') as json_file:
-        json.dump(existing_data, json_file, indent=4)
+        existing_data = {}
+        existing_data['suggestions'] = suggestions
+    save_user_record(existing_data)
 
 # Load suggestions function
-def load_suggestions(user):
-    if os.path.exists(os.path.join("static", "user_record.json")):
-        data = load_user_data(os.path.join("static", "user_record.json"))
-        if user in data:
-            return data[user].get('suggestions', {})
-    return {}
+def load_suggestions():
+    data = load_user_record()
+    return data.get('suggestions', {})
 
 # Reset suggestions function
-def reset_suggestions(user):
-    existing_data = load_user_data(os.path.join("static", "user_record.json"))
-    if user in existing_data:
-        existing_data[user]['suggestions'] = {}
-    save_user_data(os.path.join("static", "user_record.json"), existing_data)
+def reset_suggestions():
+    existing_data = load_user_record()
+    existing_data['suggestions'] = {}
+    save_user_record(existing_data)
 
 def cal_overall_score(y_pred):
     max_index = np.argsort(y_pred)[-1]
@@ -496,17 +509,13 @@ def label_processing(labels):
 
 def save_score(overall_score):
     score_save_flag = session.get('score_save_flag','False')
-    current_user = session.get('current_user','')
     if score_save_flag:
-        with open(os.path.join("static", "user_record.json"), 'r') as json_file:
-            existing_data = json.load(json_file)
-            user_dict = existing_data[current_user]
-            if 'score_list' not in user_dict:
-                user_dict['score_list'] = [overall_score]
-            else: 
-                user_dict['score_list'].append(overall_score)
-        with open(os.path.join("static", "user_record.json"), 'w') as json_file:
-            json.dump(existing_data, json_file, indent=4)
+        existing_data = load_user_record()
+        if 'score_list' not in existing_data:
+            existing_data['score_list'] = [overall_score]
+        else: 
+            existing_data['score_list'].append(overall_score)
+        save_user_record(existing_data)
         session['score_save_flag'] = False
 
 if __name__ == '__main__':
