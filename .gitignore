@@ -56,7 +56,7 @@ Desktop.ini
 
 # Heroku files
 *.env
-Procfile
+# Procfile
 
 # Logs
 *.log
