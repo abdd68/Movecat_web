@@ -1,44 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        button {
-            font-size: 18px; /* 增大字体 */
-            padding: 10px 20px; /* 增大内边距 */
-            border-radius: 5px; /* 圆角按钮 */
-            background-color: #007bff; /* 按钮背景颜色 */
-            color: white; /* 按钮文字颜色 */
-            border: none; /* 去掉边框 */
-            cursor: pointer; /* 鼠标悬停时的样式 */
-        }
-        button:hover {
-            background-color: #0056b3; /* 悬停时改变背景颜色 */
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lymphedema Early Detection System</title>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #f0f0f0;
+            }
+            h1 {
+                font-family: Arial, sans-serif;
+                font-size: 24px;
+                color: #2174C1;
+                font-weight: bold;
+                margin-bottom: 50px; /* 设置标题和按钮之间的间隔 */
+            }
+            form {
+                margin-bottom: 20px;
+            }
+            button {
+                font-size: 18px; /* 增大字体 */
+                padding: 10px 20px; /* 增大内边距 */
+                border-radius: 5px; /* 圆角按钮 */
+                background-color: #007bff; /* 按钮背景颜色 */
+                color: white; /* 按钮文字颜色 */
+                border: none; /* 去掉边框 */
+                cursor: pointer; /* 鼠标悬停时的样式 */
+                width: 225px; /* 设置固定宽度 */
+                margin: 0px; /* 增加间距让按钮分开一些 */
+            }
+    
+            /* 让按钮内容居中显示 */
+            button.large-button {
+                width: 250px; /* 根据需要调整宽度 */
+            }
+            button:hover {
+                background-color: #0056b3; /* 悬停时改变背景颜色 */
+            }
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+        </style>
+    </head>
 <body>
+    <img src="{{ url_for('static', filename='lymph.png') }}" alt="Lymph Image">
     <h1>{{title}}</h1>
     <form action="{{ url_for('page2') }}">
         <button type="submit">{{Begindetection}}</button>
@@ -47,6 +59,6 @@
     <form action="{{ url_for('logout') }}">
         <button type="submit">{{Logout}}</button>
     </form>
-    <img src="{{ url_for('static', filename='lymph.png') }}" alt="Lymph Image">
+    
 </body>
 </html>
