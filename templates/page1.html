@@ -17,8 +17,9 @@
         h1 {
             font-family: Arial, sans-serif;
             font-size: 24px;
-            color: #0078D7;
+            color: #0050A0;
             font-weight: bold;
+            margin-bottom: 50px; /* 设置标题和按钮之间的间隔 */
         }
         form {
             margin-bottom: 20px;
@@ -45,6 +46,9 @@
     <img src="{{ url_for('static', filename='lymph.png') }}" alt="Lymph Image">
     <h1>{{title}}</h1>
     <!-- Language Selection Buttons -->
+    <form action="{{ url_for('page_login') }}">
+        <button type="submit">{{login_text}}</button>
+    </form>
     <div class="language-container">
         <form action="{{ url_for('set_language') }}" method="POST">
             <button type="submit" name="lang" value="English">English （English）</button>
@@ -52,8 +56,5 @@
             <button type="submit" name="lang" value="Spanish">Spanish （Español）</button>
         </form>
     </div>
-    <form action="{{ url_for('page_login') }}">
-        <button type="submit">{{login_text}}</button>
-    </form>
 </body>
 </html>
