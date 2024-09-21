@@ -65,7 +65,7 @@ def landing():
     session['translations'] = load_translations(os.path.join("static", "translations.json"))
     session['score_save_flag'] = False
     return render_template('page1.html', title=get_text("title"),
-                               login_text=get_text("Login"), register_text=get_text("Register"))
+                               login_text=get_text("Login"), register_text=get_text("Registration"))
         
         
 @app.route('/home')
