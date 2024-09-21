@@ -1,6 +1,6 @@
 {
     "English": {
-        "title": "Lymphedema Early Detection System",
+        "title": "Smart Detection of Lymphedema",
         "Register/Login": "Register/Login",
         "begin_detection": "Begin Detection",
         "Return/Back Home": "Return/Back Home",
@@ -197,7 +197,7 @@
         "Comments": "Comments"
     },
     "Chinese": {
-        "title": "淋巴水肿早期检测系统",
+        "title": "淋巴水肿智能检测系统",
         "Register/Login": "注册/登录",
         "begin_detection": "开始检测",
         "about": "关于",
@@ -395,7 +395,7 @@
         
     },
     "Spanish": {
-        "title": "Sistema de Detección Temprana de Linfedema",
+        "title": "Detección inteligente del linfedema",
         "Register/Login": "Registro /Login",
         "begin_detection": "Comenzar Detección",
         "about": "Acerca de",
