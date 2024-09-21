@@ -144,7 +144,7 @@ def page_register():
                 save_user_data(user_data)
                 return redirect(url_for('page_login'))
 
-    return render_template('pagelogin.html', Welcome = get_text("Welcome"), 
+    return render_template('pageregister.html', Welcome = get_text("Welcome"), 
                            Login = get_text("Login"),
                            Register = get_text("Register"),
                            Username = get_text("Username:"),
