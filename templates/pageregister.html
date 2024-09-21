@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Register</title>
+    <style>
+        /* 设置全局字体大小和页面样式 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        
+        h2 {
+            font-size: 32px; /* 放大标题字体 */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 20px; /* 放大标签字体 */
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            font-size: 18px; /* 放大输入字段字体 */
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            font-size: 20px; /* 放大按钮字体 */
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            font-size: 18px; /* 放大闪现消息字体 */
+            margin: 10px 0;
+            color: red; /* 设置闪现消息的颜色 */
+        }
+    </style>
+</head>
+<body>
+    <form action="{{ url_for('page_register') }}" method="POST">
+        <h2>{{Welcome}}</h2>
+        <label for="username">{{Username}}</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">{{Password}}</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit" name="action" value="Register">{{Register}}</button>
+
+        <!-- 渲染闪现消息 -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </form>
+</body>
+</html>

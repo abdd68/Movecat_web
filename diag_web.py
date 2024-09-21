@@ -65,7 +65,7 @@ def landing():
     session['translations'] = load_translations(os.path.join("static", "translations.json"))
     session['score_save_flag'] = False
     return render_template('page1.html', title=get_text("title"),
-                               login_text=get_text("Register/Login"))
+                               login_text=get_text("Login"), register_text=get_text("Register"))
         
         
 @app.route('/home')
@@ -88,6 +88,38 @@ def logout():
 
 @app.route('/pagelogin', methods=['GET', 'POST'])
 def page_login():
+    if request.method == 'POST':
+        action = request.form['action']  # 判断用户点击了哪个按钮
+        username = request.form['username']
+        password = request.form['password']
+        user_data = session.get('user_data')
+        if action == 'Login':
+            if username in user_data and user_data[username] == password:
+                session['current_user'] = username
+                return redirect(url_for('home'))
+            else:
+                flash(get_text('Invalid username or password'), 'danger')
+                return redirect(url_for('page_login'))
+
+        elif action == 'Register':
+            if username in user_data:
+                flash(get_text('Username already exists'), 'danger')
+            elif username.strip() == '' or password.strip() == '':
+                flash(get_text('Invalid username or password: cannot be empty'), 'danger')
+            else:
+                user_data[username] = password
+                flash(get_text('Registration successful, please login'), 'success')
+                save_user_data(user_data)
+                return redirect(url_for('page_login'))
+
+    return render_template('pagelogin.html', Welcome = get_text("Welcome"), 
+                           Login = get_text("Login"),
+                           Register = get_text("Register"),
+                           Username = get_text("Username:"),
+                           Password = get_text("Password:"))
+    
+@app.route('/pageregister', methods=['GET', 'POST'])
+def page_register():
     if request.method == 'POST':
         action = request.form['action']  # 判断用户点击了哪个按钮
         username = request.form['username']

@@ -46,6 +46,9 @@
     <img src="{{ url_for('static', filename='lymph.png') }}" alt="Lymph Image">
     <h1>{{title}}</h1>
     <!-- Language Selection Buttons -->
+    <form action="{{ url_for('page_register') }}">
+        <button type="submit">{{register_text}}</button>
+    </form>
     <form action="{{ url_for('page_login') }}">
         <button type="submit">{{login_text}}</button>
     </form>
