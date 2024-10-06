@@ -156,18 +156,15 @@ def page2():
     if request.method == 'POST':
         action = request.form.get('action')
 
-        if action == 'submit':
+        if action == 'next':
             labels = request.form.to_dict()
             save_suggestions(labels)
             for i, field in enumerate(request.form.keys()):
-                if request.form[field].strip() == '' and i < 28:
+                if request.form[field].strip() == '' and i < 4:  # Check only the first 4 fields
                     flash(get_text('Please fill in all required fields.'), 'danger')
                     return redirect(url_for('page2'))
-            labels = request.form.to_dict()
-            save_suggestions(labels)
-            session['output_labels'] = label_processing(labels)
-            session['score_save_flag'] = True
-            return redirect(url_for('page3'))
+            session['page2_labels'] = labels  # Save only page2 labels
+            return redirect(url_for('page2s'))  # Redirect to page2s for the rest of the labels
         
         elif action == 'save':
             labels = request.form.to_dict()
@@ -185,27 +182,82 @@ def page2():
     # Load suggestions to pre-fill the form
     suggestions = load_suggestions()
     labels = [
-    "Your age (years)", "Time Lapse (years)", "Body weight (Kg)", "Height (cm)",
-    "Limited shoulder movement", "Limited elbow movement", "Limited wrist movement",
-    "Limited fingers movement", "Limited arm movement", "Arm or hand swelling",
-    "Breast swelling", "Chest swelling", "Toughness or thickness of skin",
-    "Pain, aching, soreness", "Tightness", "Heaviness", "Burning", "Tingling",
-    "Weakness", "Hotness", "Tenderness", "Firmness", "Numbness", "Stabbing",
-    "Fatigue", "Redness", "Stiffness", "Blister", "Chemotherapy", "Radiation",
-    "Mastectomy", "Lumpectomy", "Hormonal therapy", 
-    "Sentinel lymph node biopsy removal number", "Axillary lymph node dissection number"
+        "Your age (years)", "Time Lapse (years)", "Body weight (Kg)", "Height (cm)"
+    ]
+    for i, item in enumerate(labels):
+        labels[i] = get_text(item)
+    return render_template('page2.html', 
+                           suggestions=suggestions, 
+                           labels=labels,
+                           Reset=get_text("Reset"),
+                           Submit=get_text("Submit"),
+                           Save=get_text("Save"),
+                           Next=get_text("Next"),
+                           Return_Home=get_text("Back Home"),
+                           detection_page=get_text("detection_page"),
+                           title=get_text("Tell us about yourself"))
+
+# The Page2s view
+@app.route('/page2s', methods=['GET', 'POST'])
+def page2s():
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'submit':
+            labels = request.form.to_dict()
+            save_suggestions(labels)
+            for i, field in enumerate(request.form.keys()):
+                if request.form[field].strip() == '' and i < 24:  # Check the remaining fields
+                    flash(get_text('Please fill in all required fields.'), 'danger')
+                    return redirect(url_for('page2s'))
+            session['page2s_labels'] = labels  # Save page2s labels
+            session['output_labels'] = label_processing({**session['page2_labels'], **labels})
+            session['score_save_flag'] = True
+            return redirect(url_for('page3'))
+        
+        elif action == 'save':
+            labels = request.form.to_dict()
+            save_suggestions(labels)
+            flash(get_text('Data saved successfully'), 'success')
+            return redirect(url_for('page2s'))
+        
+        elif action == 'reset':
+            reset_suggestions()
+            flash(get_text('Data reset successfully'), 'success')
+            return redirect(url_for('page2'))
+        elif action == 'return':
+            return redirect(url_for('page2'))
+        elif action == 'return_home':
+            return redirect(url_for('home'))
+
+    # Load suggestions to pre-fill the form
+    suggestions = load_suggestions()
+    labels = [
+        "Your age (years)", "Time Lapse (years)", "Body weight (Kg)", "Height (cm)",
+        "Limited shoulder movement", "Limited elbow movement", "Limited wrist movement",
+        "Limited fingers movement", "Limited arm movement", "Arm or hand swelling",
+        "Breast swelling", "Chest swelling", "Toughness or thickness of skin",
+        "Pain, aching, soreness", "Tightness", "Heaviness", "Burning", "Tingling",
+        "Weakness", "Hotness", "Tenderness", "Firmness", "Numbness", "Stabbing",
+        "Fatigue", "Redness", "Stiffness", "Blister", "Chemotherapy", "Radiation",
+        "Mastectomy", "Lumpectomy", "Hormonal therapy", "Number_nodes"
     ]
     notations = ["None", "A little", "Somewhat", "Quite a bit", "Severe", "Yes", "No"]
     for i, item in enumerate(labels):
         labels[i] = get_text(item)
     for i, item in enumerate(notations):
         notations[i] = get_text(item)
-    return render_template('page2.html', suggestions=suggestions, labels = labels, notations = notations,
-                           Reset = get_text("Reset"),
-                           Submit = get_text("Submit"),
-                           Save = get_text("Save"),
-                           Return_Home = get_text("Return/Back Home"),
-                           detection_page = get_text("detection_page"))
+    return render_template('page2s.html', 
+                           suggestions=suggestions, 
+                           labels=labels, 
+                           notations=notations,
+                           Reset=get_text("Reset"),
+                           Submit=get_text("Submit"),
+                           Save=get_text("Save"),
+                           Return=get_text("return"),
+                           Return_home=get_text("Back Home"),
+                           detection_page=get_text("detection_page"),
+                           title=get_text("Self-reported experience and symptoms"))
+
     
 @app.route('/page3')
 def page3():
@@ -451,10 +503,10 @@ def create_figure_factor():
 def save_suggestions(suggestions):
     existing_data = load_user_record()
     try:
-        existing_data['suggestions'] = suggestions
+        existing_data['suggestions'].update(suggestions)
     except:
         existing_data = {}
-        existing_data['suggestions'] = suggestions
+        existing_data['suggestions'].update(suggestions)
     save_user_record(existing_data)
 
 # Load suggestions function
@@ -500,7 +552,13 @@ def label_processing(labels):
         'ChestWallSwelling': "0", 'Chemotherapy': "1", 'Radiation': "0", 
         'Number_nodes': "1", 'Mastectomy': "1", 'Lumpectomy': "0", 'Hormonal': "0"
     })
-    output_labels['BMI'] = float(labels['Body weight (Kg)']) / ((float(labels['Height (cm)'])/100)**2)
+    lang = session.get('lang', 'English')
+    if lang == 'English' or lang == 'Spanish':
+        output_labels['BMI'] = float(labels['Body weight (Kg)'])* 0.4536 / ((float(labels['Height (cm)'])*2.54/100)**2)
+    elif lang == 'Chinese':
+        output_labels['BMI'] = float(labels['Body weight (Kg)']) / ((float(labels['Height (cm)'])/100)**2)
+    else:
+        raise('Language error')
     output_labels['Age'] = labels['Age (years)']
     output_labels['TIME_LAPSE'] = math.log(float(labels['Time Lapse (years)']))
     output_labels['Mobility'] = max(
@@ -532,7 +590,8 @@ def label_processing(labels):
     output_labels['ChestWallSwelling'] = labels['Chest swelling']
     output_labels['Chemotherapy'] = validate_str(labels['Chemotherapy'])
     output_labels['Radiation'] = validate_str(labels['Radiation'])
-    output_labels['Number_nodes'] = int(validate_str(labels['SLNB_Removed_LN'])) + int(validate_str(labels['ALND_Removed_LN']))
+    output_labels['Number_nodes'] = int(validate_str(labels['Number_nodes']))
+    # output_labels['Number_nodes'] = int(validate_str(labels['SLNB_Removed_LN'])) + int(validate_str(labels['ALND_Removed_LN']))
     output_labels['Mastectomy'] = validate_str(labels['Mastectomy'])
     output_labels['Lumpectomy'] = validate_str(labels['Lumpectomy'])
     output_labels['Hormonal'] = validate_str(labels['Hormonal therapy'])
