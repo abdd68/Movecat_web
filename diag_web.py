@@ -507,6 +507,7 @@ def pagefactor():
                            Return = get_text('return'),
                            Back_Home = get_text('Back Home'))
 
+import matplotlib.patches as mpatches
 def create_figure_factor():
     lang = session.get('lang', 'English')
     output_labels = session.get('output_labels', {})
@@ -527,42 +528,87 @@ def create_figure_factor():
     for label in plt.gca().get_xticklabels():
         label.set_fontproperties(font_prop)
     
+    # 定义图例
+    legend_elements = []
     data = []
     if int(output_labels['ArmSwelling']) > 0:
-        data.append(('Arm or hand swelling', 0.5666504441537034))
+        data.append(('Arm or hand swelling', 0.5928480081918506))
     if output_labels['SYM_COUNT'] > 5:
-        data.append(('Related symptom count', 0.32829106757634513))
+        data.append(('Symptom count', 0.31719138707557704))
     if int(output_labels['BreastSwelling']) > 0:
-        data.append(('Breast swelling', 0.05866949630997336))
+        data.append(('Breast swelling', 0.052211787497546173))
     if output_labels['BMI'] > 23.5 or output_labels['BMI'] < 19:
         data.append(('Height and weight (BMI)', 0.0048442873079247665))
     if int(output_labels['FHT']) > 0:
         data.append(('Tightness, firmness, and heaviness', 0.003799860520333767))
     if int(output_labels['Skin']) > 0:
-        data.append(('Toughness of skin', 0.0018357913101027619))
+        data.append(('Toughness of skin', 0.0025052033960348543))
     if int(output_labels['DISCOMFORT']) > 0:
         data.append(('Discomfort', 0.0009075648872365948))
     if int(output_labels['PAS']) > 0:
-        data.append(('Pain, aching and soreness', 0.0007936402703285446))
+        data.append(('Pain, aching and soreness', 0.0017857497787161997))
     if int(output_labels['Mobility']) > 0:
-        data.append(('Limited Mobility', 0.000173412474200293))
-    if int(output_labels['ChestWallSwelling']) > 0:
-        data.append(('ChestWall swelling', 0.0001060488637141992))
+        data.append(('Limited body mobility', 0.0010408765113593605))
+        
+    if float(output_labels['TIME_LAPSE']) < 0:
+        data.append(('Time lapse since surgery', 0.028469056560957186))
+    if int(output_labels['Number_nodes']) > 5:
+        data.append(('Number_nodes', 0.003701111567446392))
+    if int(output_labels['Lumpectomy']) == 1:
+        data.append(('Lumpectomy', 0.00012986366204811907))
+    if int(output_labels['Mastectomy']) == 1:
+        data.append(('Mastectomy', 7.34066065550406e-05))
+    if int(output_labels['Chemotherapy']) == 1:
+        data.append(('Chemotherapy', 4.354915190906029e-05))
     
+    def make_color(data):
+        colors = []
+        grey_flag = 0
+        fh,fm,fl,fg = 0,0,0,0
+        for item in data:
+            if item[0] in ['TIME_LAPSE', 'Number_nodes', 'Lumpectomy', 'Mastectomy', 'Chemotherapy']:
+                grey_flag = 1
+                
+            if grey_flag == 0:
+                if item[1] > 0.1:
+                    if fh == 0:
+                        fh = 1
+                        legend_elements.append(mpatches.Patch(color='firebrick', label=get_text('High Risk (> 10%)')))
+                    colors.append('firebrick')
+                elif item[1] > 0.01:
+                    if fm == 0:
+                        fm = 1
+                        legend_elements.append(mpatches.Patch(color='darkorange', label=get_text('Moderate Risk (> 1%)')))
+                    colors.append('darkorange')
+                else:
+                    if fl == 0:
+                        fl = 1
+                        legend_elements.append(mpatches.Patch(color='goldenrod', label=get_text('Low Risk (< 1%)')))
+                    colors.append('goldenrod')
+            else:
+                if fg == 0:
+                    fg = 1
+                    legend_elements.append(mpatches.Patch(color='grey', label=get_text('Fixed Risk')))
+                colors.append('grey')
+        return colors
+    
+    colors = make_color(data)
     x = [get_text(item[0]) for item in data]
     y = [item[1] for item in data]
     loc = zip(x, y)
-    plt.xlim(0, 1)
-    plt.barh(x, y, facecolor='Teal')
-    plt.xticks(fontsize=24)
+    plt.xlim(0, 2)
+    plt.barh(x, y, color=colors)
+    # plt.xticks(fontsize=24)
+    plt.gca().get_xaxis().set_visible(False)  # 隐藏 x 轴的刻度线和标签
     plt.yticks(fontsize=24)
     plt.gca().invert_yaxis()  # 反转纵轴顺序
     for x, y in loc:
-        if y >= 0.0001:
-            plt.text((1+0.1)*y, x, '%.1g' % y, va='center')
+        if y >= 0.001:
+            plt.text((1 + 0.1) * y, x, f'{y * 100:.1f}%', va='center')
         else:
-            plt.text((1+0.1)*y, x, '<0.0001', va='center')
+            plt.text((1 + 0.1) * y, x, '<0.1%', va='center')
 
+    plt.legend(handles=legend_elements, loc='lower right', fontsize=22)
     plt.tight_layout()
     # plt.subplots_adjust(left=0.255, right=0.9, top=0.91, bottom=0.01)
 
