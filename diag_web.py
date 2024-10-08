@@ -275,45 +275,110 @@ def page3():
     save_score(overall_score)
 
     # draw
-    plt.figure(num = 1, figsize=(8, 3.3), dpi=100)
+    plt.figure(num = 1, figsize=(8, 3), dpi=200)
 
     # 设置字体
     plt.rcParams['font.sans-serif'] = ['SimHei']
     plt.rcParams['axes.unicode_minus'] = False
     if lang == 'Chinese':
         font = {'family': 'SimHei', 'weight': 'normal', 'size': 26}
+        font2 = {'family': 'SimHei', 'weight': 'normal', 'size': 26}
     else:
         font = {'family': 'serif', 'serif': 'Times New Roman', 'weight': 'normal', 'size': 26}
+        font2 = {'family': 'Times New Roman', 'weight': 'normal', 'size': 24}
     plt.rc('font', **font)
 
-    # 创建分段渐变条
-    plt.title(get_text('Lymphedema score'), pad=60)
-    gradient = np.linspace(0, 1, 1000).reshape(1, -1)
-    plt.imshow(gradient, aspect='auto', cmap='RdYlGn_r', extent=[0, 100, 0, 1])
+##
+    # plt.title(get_text('Lymphedema score'), pad=60)
+    # gradient = np.linspace(0, 1, 1000).reshape(1, -1)
+    # plt.imshow(gradient, aspect='auto', cmap='RdYlGn_r', extent=[0, 100, 0, 1])
 
-    # 绘制风险评分的指示线
-    plt.axvline(overall_score, color='black', linewidth=2)
-    plt.text(overall_score, 0.5, f'{overall_score:.1f}', color='black', va='center', ha='center', bbox=dict(facecolor='white',edgecolor='none', alpha=0.7))
+    # # 绘制风险评分的指示线
+    # plt.axvline(overall_score, color='black', linewidth=2)
+    # plt.text(overall_score, 0.5, f'{overall_score:.1f}', color='black', va='center', ha='center', bbox=dict(facecolor='white',edgecolor='none', alpha=0.7))
 
-    # 添加分界线
-    threshold1 = 33.3
-    threshold2 = 66.7
-    plt.axvline(threshold1, color='black', linestyle='--', linewidth=2)
-    plt.axvline(threshold2, color='black', linestyle='--', linewidth=2)
+    # # 添加分界线
+    # threshold1 = 33.3
+    # threshold2 = 66.7
+    # plt.axvline(threshold1, color='black', linestyle='--', linewidth=2)
+    # plt.axvline(threshold2, color='black', linestyle='--', linewidth=2)
 
-    # 添加箭头符号指示当前值，并将箭头放在图像上方
+    # # 添加箭头符号指示当前值，并将箭头放在图像上方
+    # re_dict = {0: "low_risk", 1: "mild", 2: "moderate_severe"}
+    # plt.gca().annotate(
+    #     get_text(re_dict[max_label]), xy=(overall_score, 1), xytext=(overall_score, 1.2),
+    #     arrowprops=dict(facecolor='black', shrink=0.1, headwidth=10, width=3),
+    #     ha='center', va='bottom', backgroundcolor='white',
+    #     fontsize=30
+    # )
+
+    # # 设置图形标题和标签
+    # plt.gca().set_yticks([])
+    # plt.gca().set_xlim(0, 100)
+    # plt.tight_layout()
+    
+    labels = ['Severe', 'Moderate', 'Mild', 'Subclinical', 'Lower Risk']
+    labels = [get_text(label) for label in labels]
+    colors = ['green', 'yellowgreen', 'goldenrod', 'darkorange', 'firebrick']
+    start_angle = 180
+    end_angle = 0
     re_dict = {0: "low_risk", 1: "mild", 2: "moderate_severe"}
-    plt.gca().annotate(
-        get_text(re_dict[max_label]), xy=(overall_score, 1), xytext=(overall_score, 1.2),
-        arrowprops=dict(facecolor='black', shrink=0.1, headwidth=10, width=3),
-        ha='center', va='bottom', backgroundcolor='white',
-        fontsize=30
-    )
+    
+    plt.figure()
+    plt.axis('equal')  # 保证饼图是一个圆形
 
-    # 设置图形标题和标签
-    plt.gca().set_yticks([])
-    plt.gca().set_xlim(0, 100)
-    plt.tight_layout()
+# 添加带颜色的评分标题和值
+    score_color = 'firebrick' if overall_score > 250/3 else 'darkorange' if overall_score > 200/3 else 'goldenrod' if overall_score > 50 else 'yellowgreen' if overall_score > 100/3 else 'green'
+    x_min, x_max = plt.gca().get_xlim()  # 获取x轴的范围
+    if lang == 'English':
+        center_x = (x_min + x_max) / 2 + 0.4 # 计算中心点的x坐标
+    elif lang == 'Chinese':
+        center_x = (x_min + x_max) / 2 + 0.3 # 计算中心点的x坐标
+    elif lang == 'Spanish':
+        center_x = (x_min + x_max) / 2 + 0.58 # 计算中心点的x坐标
+    plt.text(center_x - 0.025, 1.1, f'{get_text("Lymphedema score")}:', ha='right', va='center', fontsize=24, fontweight='bold', color='black')
+    plt.text(center_x + 0.025, 1.1, f'{overall_score:.1f}', ha='left', va='center', fontsize=24, fontweight='bold', color=score_color)
+    # 创建分区（半圆）
+    wedges, _ = plt.pie(
+        [1, 1, 1, 1, 6],
+        startangle=start_angle,
+        colors=colors,
+        counterclock=False,
+        wedgeprops={'width': 0.4, 'edgecolor': 'none'}
+    )
+    
+    # 隐藏下半部分的饼图，使其成为半圆
+    plt.gca().add_patch(plt.Rectangle((-1, -1), 2, 1, color='white', zorder=3))
+    
+    # 设置指针角度和长度
+    if overall_score > 100/3:
+        needle_angle = -(144*3/200) * overall_score + 216
+    else:
+        needle_angle = -108/100 * overall_score + 180
+    needle_length = 0.48
+    needle_x = needle_length * np.cos(np.radians(needle_angle))
+    needle_y = needle_length * np.sin(np.radians(needle_angle))
+    
+    # 绘制指针
+    plt.arrow(0, 0, needle_x, needle_y, head_width=0.05, head_length=0.1, fc='black', ec='black', linewidth=4)
+
+    # 设置中心的空心圆
+    plt.gca().add_patch(plt.Circle((0, 0), 0.1, color='black'))
+
+    # 设置标签
+    for i, label in enumerate(labels):
+        angle = (start_angle - end_angle) * (i + 0.5) / len(labels) + end_angle
+        angle_rad = np.radians(angle)
+        plt.text(
+            0.8 * np.cos(angle_rad),
+            0.8 * np.sin(angle_rad),
+            label,
+            ha='center', va='center',
+            color='black',
+            fontdict=font2
+        )
+
+    plt.tight_layout(rect=[-0.3, -0.5, 1.3, 1])
 
     # 将图像保存为 base64 编码的字符串
     output = BytesIO()
@@ -351,7 +416,16 @@ def page3():
         elif overall_score < last_time_score and (max_label == 1 or max_label == 2):
             comments.append(get_text('Congratulations! Your detection result is better than your last time. Keep on excercising and keep on the good record!'))
 
-    suggestions.append(get_text(f'diag_{re_dict[max_label]}'))
+    if overall_score > 250/3:
+        suggestions.append(get_text(f'diag_severe'))
+    elif overall_score > 200/3:
+        suggestions.append(get_text(f'diag_moderate'))
+    elif overall_score > 50:
+        suggestions.append(get_text(f'diag_mild'))
+    elif overall_score > 100/3:
+        suggestions.append(get_text(f'diag_subclinical'))
+    else:
+        suggestions.append(get_text(f'diag_low_risk'))
     
     return render_template('page3.html', title = get_text("Visualized Diagnosis"), plot_frame_content=plot_frame_content, comments=comments, suggestions=suggestions, 
                            ct = get_text('Comments'), st = get_text('Suggestions'),

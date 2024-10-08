@@ -110,6 +110,10 @@
         "Somewhat": "Somewhat", 
         "Quite a bit": "Quite a bit", 
         "Severe": "Severe",
+        "Moderate": "Moderate",
+        "Mild": "Mild",
+        "Subclinical": "Subclinical",
+        "Lower Risk": "Lower Risk",
         "In the detection page, detailed instructions are shown when you move the cursor🖱️ close to the words (for example, Your age (years)...).": "In the detection page, detailed instructions are shown when you move the cursor🖱️ close to the words (for example, Your age (years)...).",
         "Help": "Help",
         "Language": "Language",
@@ -170,9 +174,16 @@
         "Data saved!": "Data saved!",
         "Confirmation": "Confirmation",
         "Are you sure you want to reset? This will clear your reported symptoms.": "Are you sure you want to reset? This will clear your reported symptoms.",
-        "diag_low_risk": "For individuals at low risk for lymphedema, it's essential to stay informed about the condition and its early symptoms, such as swelling or skin changes. \n\nMaintain a healthy weight through balanced diet and regular exercise, keep your skin moisturized and protected from injuries, and avoid heavy lifting or activities that strain your limbs. Use compression garments when recommended and be cautious with extreme temperatures. Regularly monitor for any changes and consult your healthcare provider promptly if symptoms develop.",
-        "diag_mild": "For individuals with mild lymphedema, it is crucial to manage your condition through regular monitoring and lifestyle adjustments. \n\nMaintain a healthy weight with a balanced diet and regular exercise, and practice diligent skin care to prevent infections. Use compression garments as recommended by your healthcare provider to support lymphatic function. Avoid activities that excessively strain the affected limb and be cautious with extreme temperatures. Regular follow-ups with your healthcare provider are essential to monitor the condition and ensure timely intervention if symptoms progress.",
-        "diag_moderate_severe": "For individuals with moderate to severe lymphedema, comprehensive management is crucial. \n\nAdhere to a regimen that includes consistent use of compression garments, regular lymphatic drainage massages, and physical therapy exercises tailored to improve lymph flow. Maintain rigorous skin care to prevent infections and avoid cuts and burns. Monitor your condition closely and keep regular appointments with your healthcare provider to track progress and adjust treatments as needed. Limit activities that put excessive strain on the affected area and be mindful of temperature extremes. Early and proactive intervention is key to managing symptoms and improving quality of life.",
+        "diag_low_risk": "Your LymphScore indicates a LOWER RISK OF LYMPHEDEMA. Please continue daily 30-minute large muscle exercises and skin care. Since the risk of lymphedema is lifetime and early detection and intervention can reverse mild lymphedema, it is important for you to monitor your risk of lymphedema monthly. Please monitor your lymphedema status weekly by visiting The-Optimal-Lymph-Flow Smart Detection site.",
+    
+        "diag_subclinical": "Your LymphScore indicates a SUBCLINICAL LYMPHEDEMA. Please continue daily 30-minute large muscle exercises and skin care. Please start The-Optimal-Lymph-Flow (TOLF) Program immediately. Research has shown that practice TOLF Lymphatic Exercises at least twice a day leads to the reverse of mild lymphedema. Since the risk of lymphedema is lifetime and early detection and intervention can reverse subclinical and mild lymphedema, it is important for you to monitor your risk of lymphedema monthly. Please monitor your lymphedema status weekly by visiting The-Optimal-Lymph-Flow Smart Detection site.",
+        
+        "diag_mild": "Your LymphScore indicates MILD LYMPHEDEMA. Please start The-Optimal-Lymph-Flow (TOLF) Program immediately. Research has shown that practice TOLF Lymphatic Exercises at least twice a day leads to the reverse of mild lymphedema. Lymph fluid is accumulated every 3 seconds, it is important for you to practice TOLF lymphatic exercises daily and continue daily 30-minute large muscle exercises and skin care. Please monitor your lymphedema status weekly by visiting The-Optimal-Lymph-Flow Smart Detection site.",
+        
+        "diag_moderate": "Your LymphScore indicates MODERATE LYMPHEDEMA. Please contact your healthcare providers immediately for a referral to lymphedema treatment. Please also start The-Optimal-Lymph-Flow (TOLF) Program immediately. Research has shown that practice TOLF Lymphatic exercises at least twice a day leads to better management of lymphedema. Lymph fluid is accumulated every 3 seconds, it is important for you to practice TOLF lymphatic exercises daily and continue daily 30-minute large muscle exercises and skin care. It is also important for you to monitor your progress of lymphedema management weekly. Please monitor your lymphedema status weekly by visiting The-Optimal-Lymph-Flow Smart Detection site.",
+        
+        "diag_severe": "Your LymphScore indicates SEVERE LYMPHEDEMA. Please contact your healthcare providers immediately for a referral to lymphedema treatment. Please also start The-Optimal-Lymph-Flow (TOLF) Program immediately. Research has shown that practice TOLF Lymphatic exercises at least twice a day leads to better management of lymphedema. Lymph fluid is accumulated every 3 seconds, it is important for you to practice TOLF lymphatic exercises daily and continue daily 30-minute large muscle exercises and skin care as well as prescribed compression therapy. It is also important for you to monitor your progress of lymphedema management weekly. Please monitor your lymphedema status weekly by visiting The-Optimal-Lymph-Flow Smart Detection site.",
+        
         "This is your first time detecting Lymphedema. Keep on excercising and let us see your progress!": "This is your first time detecting Lymphedema. Keep on excercising and let us see your progress!",
         "This is your first time detecting Lymphedema. Keep on the good record!": "This is your first time detecting Lymphedema. Keep on the good record!",
         "Your detection result shows low risk, keep on the good record!": "Your detection result shows low risk, keep on the good record!",
@@ -350,6 +361,10 @@
         "last 10 times": "最近10次",
         "last 20 times": "最近20次",
         "Overall": "全部",
+        "Moderate": "中度",
+        "Mild": "轻度",
+        "Subclinical": "亚临床",
+        "Lower Risk": "低风险",
         "Your Risk Factors Contributing to Lymphedema": "导致淋巴水肿的风险因素",
         "Related symptom count": "相关症状数",
         "time lapse since last surgery": "自上次手术以来的时间间隔",
@@ -372,10 +387,16 @@
         "Changing the fontsize will restart the system. Make sure the data is saved.": "改变字体大小将会重启系统。请确保数据已保存。",
         "Data saved!": "数据已保存！",
         "Confirmation": "确认",
+        "diag_low_risk": "您的淋巴评分表明淋巴水肿的风险较低。请继续每天进行30分钟的大肌肉锻炼和皮肤护理。由于淋巴水肿的风险是终生的，早期检测和干预可以逆转轻度淋巴水肿，因此每月监测您的淋巴水肿风险非常重要。请通过访问“最佳淋巴流动智能检测”网站，每周监测您的淋巴水肿状态。",
+    
+        "diag_subclinical": "您的淋巴评分表明存在亚临床淋巴水肿。请继续每天进行30分钟的大肌肉锻炼和皮肤护理。请立即开始“最佳淋巴流动”（TOLF）计划。研究表明，每天至少两次练习TOLF淋巴运动有助于逆转轻度淋巴水肿。由于淋巴水肿的风险是终生的，早期检测和干预可以逆转亚临床和轻度淋巴水肿，因此每月监测您的淋巴水肿风险非常重要。请通过访问“最佳淋巴流动智能检测”网站，每周监测您的淋巴水肿状态。",
+        
+        "diag_mild": "您的淋巴评分表明存在轻度淋巴水肿。请立即开始“最佳淋巴流动”（TOLF）计划。研究表明，每天至少两次练习TOLF淋巴运动有助于逆转轻度淋巴水肿。淋巴液每3秒积累一次，因此每天练习TOLF淋巴运动并继续进行每天30分钟的大肌肉锻炼和皮肤护理非常重要。请通过访问“最佳淋巴流动智能检测”网站，每周监测您的淋巴水肿状态。",
+        
+        "diag_moderate": "您的淋巴评分表明存在中度淋巴水肿。请立即联系您的医疗提供者，获取淋巴水肿治疗的转诊。请立即开始“最佳淋巴流动”（TOLF）计划。研究表明，每天至少两次练习TOLF淋巴运动有助于更好地管理淋巴水肿。淋巴液每3秒积累一次，因此每天练习TOLF淋巴运动并继续进行每天30分钟的大肌肉锻炼和皮肤护理非常重要。监测淋巴水肿管理的进展也非常重要。请通过访问“最佳淋巴流动智能检测”网站，每周监测您的淋巴水肿状态。",
+        
+        "diag_severe": "您的淋巴评分表明存在严重淋巴水肿。请立即联系您的医疗提供者，获取淋巴水肿治疗的转诊。请立即开始“最佳淋巴流动”（TOLF）计划。研究表明，每天至少两次练习TOLF淋巴运动有助于更好地管理淋巴水肿。淋巴液每3秒积累一次，因此每天练习TOLF淋巴运动、继续进行每天30分钟的大肌肉锻炼和皮肤护理以及使用处方的压迫治疗非常重要。监测淋巴水肿管理的进展也非常重要。请通过访问“最佳淋巴流动智能检测”网站，每周监测您的淋巴水肿状态。",    
         "Are you sure you want to reset? This will clear your reported symptoms.": "您确定要重置吗？这将清除您报告的症状。",
-        "diag_low_risk": "对于低风险淋巴水肿群体，至关重要的是了解这种情况及其早期症状，如肿胀或皮肤变化。通过均衡饮食和定期锻炼保持健康体重，保持皮肤湿润并保护其免受伤害，避免过重的体力劳动或使肢体过度劳累的活动。当推荐时，使用压缩衣物，并谨慎应对极端温度。定期监测任何变化，如果出现症状，及时咨询您的医疗提供者。",
-        "diag_mild": "对于轻度淋巴水肿患者，关键在于通过定期监测和生活方式调整来管理您的状况。保持健康体重，均衡饮食和定期锻炼，勤于皮肤护理以预防感染。按医疗提供者的建议使用压缩衣物以支持淋巴功能。避免过度劳累受影响的肢体，并注意极端温度。定期随访您的医疗提供者，以监测状况并确保症状进展时能及时干预。",
-        "diag_moderate_severe": "对于中度至重度淋巴水肿患者，综合管理至关重要。坚持使用压缩衣物，定期进行淋巴引流按摩和物理治疗锻炼以改善淋巴流动。保持严格的皮肤护理以预防感染，并避免割伤和烧伤。密切监测您的状况，定期预约您的医疗提供者以跟踪进展并根据需要调整治疗。限制对受影响区域施加过大压力的活动，并注意极端温度。早期和主动的干预是管理症状和改善生活质量的关键。",
         "This is your first time detecting Lymphedema. Keep on excercising and let us see your progress!": "这是您第一次检测淋巴水肿。继续锻炼，让我们看看您的进展！",
         "This is your first time detecting Lymphedema. Keep on the good record!": "这是您第一次检测淋巴水肿。保持良好的记录！",
         "Your detection result shows low risk, keep on the good record!": "您的检测结果显示低风险，保持良好的记录！",
@@ -544,7 +565,7 @@
         "You are logged out": "Has cerrado sesión",
         "Reset": "Restablecer",
         "Save": "Guardar",
-        "Lymphedema score": "La puntuación para el linfedema",
+        "Lymphedema score": "Puntuación de linfedema",
         "Predicted possibility of your Lymphedema stage": "Posibilidad predicha de su etapa de linfedema",
         "Lymphedema Score History": "Historia de la puntuación de linfedema",
         "Score": "Puntuación",
@@ -572,13 +593,23 @@
         "Large": "Grande",
         "Super Large": "Súper grande",
         "Restart": "Reiniciar",
+        "Moderate": "Moderado",
+        "Mild": "Leve",
+        "Subclinical": "Subclínico",
+        "Lower Risk": "Bajo Riesgo",
         "Changing the fontsize will restart the system. Make sure the data is saved.": "Cambiar el tamaño de la fuente reiniciará el sistema. Asegúrate de que los datos estén guardados.",
         "Data saved!": "¡Datos guardados!",
         "Confirmation": "Confirmación",
         "Are you sure you want to reset? This will clear your reported symptoms.": "¿Estás seguro de que quieres restablecer? Esto borrará tus síntomas reportados.",
-        "diag_low_risk": "Para las personas con bajo riesgo de linfedema, es esencial estar informados sobre la condición y sus síntomas tempranos, como la hinchazón o los cambios en la piel. Mantén un peso saludable mediante una dieta equilibrada y ejercicio regular, mantiene la piel hidratada y protegida de lesiones, y evita levantar objetos pesados o hacer actividades que tensionen tus extremidades. Usa prendas de compresión cuando se recomienden y ten cuidado con las temperaturas extremas. Monitorea regularmente cualquier cambio y consulta a tu proveedor de atención médica rápidamente si desarrollas síntomas.",
-        "diag_mild": "Para las personas con linfedema leve, es crucial manejar su condición mediante una monitorización regular y ajustes en el estilo de vida. Mantén un peso saludable con una dieta equilibrada y ejercicio regular, y practica un cuidadoso cuidado de la piel para prevenir infecciones. Usa prendas de compresión según lo recomendado por tu proveedor de atención médica para apoyar la función linfática. Evita actividades que tensen excesivamente la extremidad afectada y ten cuidado con las temperaturas extremas. Las revisiones regulares con tu proveedor de atención médica son esenciales para monitorear la condición y asegurar una intervención oportuna si los síntomas progresan.",
-        "diag_moderate_severe": "Para las personas con linfedema moderado a severo, la gestión integral es crucial. Adhiérete a un régimen que incluya el uso constante de prendas de compresión, masajes regulares de drenaje linfático y ejercicios de fisioterapia diseñados para mejorar el flujo linfático. Mantén un cuidado riguroso de la piel para prevenir infecciones y evita cortes y quemaduras. Monitorea tu condición de cerca y mantén citas regulares con tu proveedor de atención médica para seguir el progreso y ajustar los tratamientos según sea necesario. Limita las actividades que ejerzan una tensión excesiva en el área afectada y ten cuidado con las temperaturas extremas. La intervención temprana y proactiva es clave para manejar los síntomas y mejorar la calidad de vida.",
+        "diag_low_risk": "Su puntaje de LymphScore indica un RIESGO BAJO DE LINFEDEMA. Continúe con los ejercicios diarios de 30 minutos para grandes grupos musculares y el cuidado de la piel. Dado que el riesgo de linfedema es de por vida y la detección e intervención tempranas pueden revertir el linfedema leve, es importante monitorear su riesgo de linfedema mensualmente. Monitoree su estado de linfedema semanalmente visitando el sitio de detección inteligente The-Optimal-Lymph-Flow.",
+    
+        "diag_subclinical": "Su puntaje de LymphScore indica un LINFEDEMA SUBCLÍNICO. Continúe con los ejercicios diarios de 30 minutos para grandes grupos musculares y el cuidado de la piel. Comience de inmediato el programa The-Optimal-Lymph-Flow (TOLF). Las investigaciones han demostrado que practicar los ejercicios linfáticos TOLF al menos dos veces al día conduce a la reversión del linfedema leve. Dado que el riesgo de linfedema es de por vida y la detección e intervención tempranas pueden revertir el linfedema subclínico y leve, es importante monitorear su riesgo de linfedema mensualmente. Monitoree su estado de linfedema semanalmente visitando el sitio de detección inteligente The-Optimal-Lymph-Flow.",
+        
+        "diag_mild": "Su puntaje de LymphScore indica un LINFEDEMA LEVE. Comience de inmediato el programa The-Optimal-Lymph-Flow (TOLF). Las investigaciones han demostrado que practicar los ejercicios linfáticos TOLF al menos dos veces al día conduce a la reversión del linfedema leve. El líquido linfático se acumula cada 3 segundos, por lo que es importante practicar los ejercicios linfáticos TOLF diariamente y continuar con los ejercicios diarios de 30 minutos para grandes grupos musculares y el cuidado de la piel. Monitoree su estado de linfedema semanalmente visitando el sitio de detección inteligente The-Optimal-Lymph-Flow.",
+        
+        "diag_moderate": "Su puntaje de LymphScore indica un LINFEDEMA MODERADO. Comuníquese con sus proveedores de atención médica de inmediato para obtener una derivación para el tratamiento del linfedema. Comience de inmediato el programa The-Optimal-Lymph-Flow (TOLF). Las investigaciones han demostrado que practicar los ejercicios linfáticos TOLF al menos dos veces al día conduce a un mejor manejo del linfedema. El líquido linfático se acumula cada 3 segundos, por lo que es importante practicar los ejercicios linfáticos TOLF diariamente y continuar con los ejercicios diarios de 30 minutos para grandes grupos musculares y el cuidado de la piel. También es importante monitorear su progreso en el manejo del linfedema semanalmente. Monitoree su estado de linfedema semanalmente visitando el sitio de detección inteligente The-Optimal-Lymph-Flow.",
+        
+        "diag_severe": "Su puntaje de LymphScore indica un LINFEDEMA SEVERO. Comuníquese con sus proveedores de atención médica de inmediato para obtener una derivación para el tratamiento del linfedema. Comience de inmediato el programa The-Optimal-Lymph-Flow (TOLF). Las investigaciones han demostrado que practicar los ejercicios linfáticos TOLF al menos dos veces al día conduce a un mejor manejo del linfedema. El líquido linfático se acumula cada 3 segundos, por lo que es importante practicar los ejercicios linfáticos TOLF diariamente y continuar con los ejercicios diarios de 30 minutos para grandes grupos musculares, el cuidado de la piel y la terapia de compresión prescrita. También es importante monitorear su progreso en el manejo del linfedema semanalmente. Monitoree su estado de linfedema semanalmente visitando el sitio de detección inteligente The-Optimal-Lymph-Flow.",            
         "This is your first time detecting Lymphedema. Keep on excercising and let us see your progress!": "Esta es la primera vez que detecta linfedema. ¡Sigue ejercitando y veamos tu progreso!",
         "This is your first time detecting Lymphedema. Keep on the good record!": "Esta es la primera vez que detecta linfedema. ¡Mantén el buen registro!",
         "Your detection result shows low risk, keep on the good record!": "Tu resultado de detección muestra un riesgo bajo, ¡mantén el buen registro!",

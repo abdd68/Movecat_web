@@ -1,35 +1,52 @@
-from flask import Flask, session, redirect, url_for, request, render_template
+import matplotlib.pyplot as plt
+import numpy as np
 
-app = Flask(__name__)
+def create_gauge_chart():
+    # 设置仪表盘的分区和角度范围
+    labels = ['Very Poor', 'Poor', 'Average', 'Good', 'Very Good']
+    colors = ['green', 'lightgreen', 'yellow', 'red', 'darkred']
+    start_angle = 180
+    end_angle = 0
+    
+    fig, ax = plt.subplots()
+    ax.axis('equal')  # 保证饼图是一个圆形
 
-# 设置一个密钥来加密 session 数据
-app.secret_key = 'supersecretkey'
+    # 创建分区（半圆）
+    wedges, _ = ax.pie(
+        [1, 1, 1, 1, 6],
+        startangle=start_angle,
+        colors=colors,
+        counterclock=False,
+        wedgeprops={'width': 0.4, 'edgecolor': 'none'}
+    )
+    
+    # 隐藏下半部分的饼图，使其成为半圆
+    ax.add_artist(plt.Rectangle((-1, -1), 2, 1, color='white', zorder=3))
+    
+    # 设置指针角度，和仪表盘的总角度对应
+    needle_angle = 135
+    needle_length = 0.5
+    needle_x = needle_length * np.cos(np.radians(needle_angle))
+    needle_y = needle_length * np.sin(np.radians(needle_angle))
+    
+    ax.arrow(0, 0, needle_x, needle_y, head_width=0.05, head_length=0.1, fc='black', ec='black', linewidth=4)
 
-@app.route('/')
-def index():
-    # 获取 session 中的 'username'，如果不存在则使用 'Guest' 作为默认值
-    username = session.get('username', 'Guest')
-    breakpoint()
-    return f'Hello, {username}! <br><a href="/login">Login</a> | <a href="/logout">Logout</a>'
+    # 设置中心的空心圆
+    ax.add_artist(plt.Circle((0, 0), 0.1, color='black'))
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # 从表单中获取用户名并存储到 session 中
-        session['username'] = request.form['username']
-        return redirect(url_for('index'))
-    return '''
-        <form method="post">
-            Username: <input type="text" name="username">
-            <input type="submit" value="Login">
-        </form>
-    '''
+    # 设置标签
+    for i, label in enumerate(labels):
+        angle = (start_angle - end_angle) * (i + 0.5) / len(labels) + end_angle
+        angle_rad = np.radians(angle)
+        ax.text(
+            0.75 * np.cos(angle_rad),
+            0.75 * np.sin(angle_rad),
+            label,
+            ha='center', va='center',
+            fontsize=10,
+            color='black'
+        )
+    
+    plt.show()
 
-@app.route('/logout')
-def logout():
-    # 删除 session 中的 'username'
-    session.pop('username', None)
-    return redirect(url_for('index'))
-
-if __name__ == '__main__':
-    app.run(debug=True)
+create_gauge_chart()
